@@ -2,8 +2,9 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
 from .models import Book
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-class BookListView(View):
+class BookListView(LoginRequiredMixin, View):
     def get(self, request):
         search = request.GET.get("search")
         if not search:
@@ -23,15 +24,7 @@ class BookListView(View):
                 }
                 return render(request, "library/books.html", context)
 
-
-
-
-
-
-
 class BookDetailView(View):
     def get(self, request, id):
         book = Book.objects.get(id=id)
         return render(request, "library/books_detail.html", context={"book": book})
-
-# Create your views here.
